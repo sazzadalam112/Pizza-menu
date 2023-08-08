@@ -30,7 +30,7 @@ const pizzaData = [
       ingredients: "Tomato, mozarella, mushrooms, and onion",
       price: 12,
       photoName: "pizzas/funghi.jpg",
-      soldOut: false,
+      soldOut: true,
     },
     {
       name: "Pizza Salamino",
@@ -61,7 +61,7 @@ function App() {
     // const style = {color:"red",fontSize: "48px",textTransform:"uppercase"}
     const style = {};
     return (
-    <header className="header footer">
+    <header className="header">
       <h1 style={style} >Fast React Pizza Co..</h1>
    
     </header>
@@ -75,13 +75,19 @@ function App() {
     return(
       <main className="menu">
         <h2>Our Menu</h2>
+        
 
         {numPizzas > 0 ? (
+          <>
+          <p>
+          Authentic Italian cuisine. 6 creative dishes to chosse from.All from our stone oven,all organic,all delicious.
+          </p>
         <ul className="pizzas">
           {pizzas.map((pizza) => (
             <Pizza pizzaObj = {pizza} key={pizza.name} />
           ))}
         </ul> 
+        </>
         ): <p>We're still working on our menu.Please come back later:</p> }
         
             {/* <Pizza 
@@ -107,17 +113,24 @@ function App() {
          </main>
          );  
   }
-  function Pizza(props) {
-    console.log(props);
+  function Pizza({pizzaObj}) {
+    console.log(pizzaObj);
 
-    if(props.pizzaObj.soldOut) return null;
+    // if(pizzaObj.soldOut) return null;
     return (
-     <li className="pizza">
-         <img src={props.pizzaObj.photoName} alt ={props.pizzaObj.name}/>
+     <li className={`pizza ${pizzaObj.soldOut ? "sold-out" : " "}`}>
+         <img src={pizzaObj.photoName} alt ={pizzaObj.name}/>
          <div>
-           <h3 >{props.pizzaObj.name}</h3>
-         <p>{props.pizzaObj.ingredients}</p>
-         <span>{props.pizzaObj.price + 3}</span>
+           <h3 >{pizzaObj.name}</h3>
+         <p>{pizzaObj.ingredients}</p>
+
+         {/* {pizzaObj.soldOut ?(
+          <span>SOLD OUT</span>
+         ): (
+          <span>{pizzaObj.price}</span>
+         )} */}
+         <span>{pizzaObj.soldOut ? "SOLD OUT": pizzaObj.price}</span>
+
          </div>
         
      </li>
@@ -126,7 +139,7 @@ function App() {
 
   function Fotter() {
     const hour = new Date().getHours();
-    const openHour = 12;
+    const openHour = 1;
     const closeHour = 22;
     
     const isOpen = hour >= openHour && hour <= closeHour;
@@ -136,7 +149,8 @@ function App() {
     return(
        <footer className="fotter">
         {isOpen ?(
-          <Order closeHour={closeHour }/>
+          <Order closeHour={closeHour} 
+          openHour={openHour}/>
         ) : (
         <p>
         We're happy to Welcome {openHour}:00 and {closeHour}:00</p>
@@ -148,11 +162,11 @@ function App() {
 
   }
 
-  function Order(props) {
+  function Order({ closeHour,openHour}) {
     return(
     <div className="order">
           <p>
-          we 're open until {props.closeHour}:00. Come visit us or order online.
+          we 're open from {openHour}:00. to {closeHour}:00.Come visit us or order online.
           </p>
           <button className="btn">Order</button>
           </div>
